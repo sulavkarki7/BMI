@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 const bottomContainerHeight = 80.0;
 const bottomContainerColor = Color(0xFFEB1555);
 const activeContainerColor = Color(0xFF1D1E33);
+const inactiveContainerColor = Color(0xFF111328);
 
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
@@ -18,6 +19,25 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
+  Color maleContainerColor = inactiveContainerColor;
+  Color femaleContainerColor = inactiveContainerColor;
+
+  void updateColor(int gender) {
+    setState(() {
+      if (gender == 1) {
+        maleContainerColor = maleContainerColor == inactiveContainerColor
+            ? activeContainerColor
+            : inactiveContainerColor;
+        femaleContainerColor = inactiveContainerColor;
+      } else {
+        femaleContainerColor = femaleContainerColor == inactiveContainerColor
+            ? activeContainerColor
+            : inactiveContainerColor;
+        maleContainerColor = inactiveContainerColor;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,21 +55,32 @@ class _InputPageState extends State<InputPage> {
             child: Row(
               children: [
                 Expanded(
-                  child: ReusableContainer(
-                    colorr: activeContainerColor,
-                    cardchild: IconContent(
-                      icon: FontAwesomeIcons.mars,
-                      label: 'MALE',
+                  child: GestureDetector(
+                    onDoubleTap: () {
+                      updateColor(1);
+                    },
+                    child: ReusableContainer(
+                      colorr: maleContainerColor,
+                      cardchild: IconContent(
+                        icon: FontAwesomeIcons.mars,
+                        label: 'MALE',
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
-                  child: ReusableContainer(
-                      colorr: activeContainerColor,
+                  child: GestureDetector(
+                    onDoubleTap: () {
+                      updateColor(2);
+                    },
+                    child: ReusableContainer(
+                      colorr: femaleContainerColor,
                       cardchild: IconContent(
                         icon: FontAwesomeIcons.venus,
                         label: 'FEMALE',
-                      )),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
