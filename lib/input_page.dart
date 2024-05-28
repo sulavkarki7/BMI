@@ -11,6 +11,11 @@ const bottomContainerColor = Color(0xFFEB1555);
 const activeContainerColor = Color(0xFF1D1E33);
 const inactiveContainerColor = Color(0xFF111328);
 
+enum Gender {
+  male,
+  female,
+}
+
 class InputPage extends StatefulWidget {
   const InputPage({super.key});
 
@@ -19,24 +24,24 @@ class InputPage extends StatefulWidget {
 }
 
 class _InputPageState extends State<InputPage> {
-  Color maleContainerColor = inactiveContainerColor;
-  Color femaleContainerColor = inactiveContainerColor;
+  Gender? selectedGender;
+  // Color maleContainerColor = inactiveContainerColor;
+  // Color femaleContainerColor = inactiveContainerColor;
 
-  void updateColor(int gender) {
-    setState(() {
-      if (gender == 1) {
-        maleContainerColor = maleContainerColor == inactiveContainerColor
-            ? activeContainerColor
-            : inactiveContainerColor;
-        femaleContainerColor = inactiveContainerColor;
-      } else {
-        femaleContainerColor = femaleContainerColor == inactiveContainerColor
-            ? activeContainerColor
-            : inactiveContainerColor;
-        maleContainerColor = inactiveContainerColor;
-      }
-    });
-  }
+  // void updateColor(Gender selectedGender) {
+  //   setState(() {
+  //     if (selectedGender == Gender.male) {
+  //       maleContainerColor = maleContainerColor == inactiveContainerColor          ? activeContainerColor
+  //           : inactiveContainerColor;
+  //       femaleContainerColor = inactiveContainerColor;
+  //     }
+  //     if (selectedGender == Gender.female) {
+  //       femaleContainerColor = femaleContainerColor == inactiveContainerColor           ? activeContainerColor
+  //           : inactiveContainerColor;
+  //       maleContainerColor = inactiveContainerColor;
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +62,15 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: GestureDetector(
                     onDoubleTap: () {
-                      updateColor(1);
+                      setState(() {
+                        selectedGender =
+                            selectedGender == Gender.male ? null : Gender.male;
+                      });
                     },
                     child: ReusableContainer(
-                      colorr: maleContainerColor,
+                      colorr: selectedGender == Gender.male
+                          ? activeContainerColor
+                          : inactiveContainerColor,
                       cardchild: IconContent(
                         icon: FontAwesomeIcons.mars,
                         label: 'MALE',
@@ -71,10 +81,16 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: GestureDetector(
                     onDoubleTap: () {
-                      updateColor(2);
+                      setState(() {
+                        selectedGender = selectedGender == Gender.female
+                            ? null
+                            : Gender.female;
+                      });
                     },
                     child: ReusableContainer(
-                      colorr: femaleContainerColor,
+                      colorr: selectedGender == Gender.female
+                          ? activeContainerColor
+                          : inactiveContainerColor,
                       cardchild: IconContent(
                         icon: FontAwesomeIcons.venus,
                         label: 'FEMALE',
