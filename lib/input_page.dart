@@ -1,15 +1,11 @@
 import 'dart:math';
 import 'reusable_container.dart';
 import 'icon_content.dart';
+import 'constant.dart';
 
 import 'main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-const bottomContainerHeight = 80.0;
-const bottomContainerColor = Color(0xFFEB1555);
-const activeContainerColor = Color(0xFF1D1E33);
-const inactiveContainerColor = Color(0xFF111328);
 
 enum Gender {
   male,
@@ -25,6 +21,7 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   Gender? selectedGender;
+  int height = 180;
   // Color maleContainerColor = inactiveContainerColor;
   // Color femaleContainerColor = inactiveContainerColor;
 
@@ -55,13 +52,14 @@ class _InputPageState extends State<InputPage> {
         ),
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: Row(
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onDoubleTap: () {
+                    onTap: () {
                       setState(() {
                         selectedGender =
                             selectedGender == Gender.male ? null : Gender.male;
@@ -69,8 +67,8 @@ class _InputPageState extends State<InputPage> {
                     },
                     child: ReusableContainer(
                       colorr: selectedGender == Gender.male
-                          ? activeContainerColor
-                          : inactiveContainerColor,
+                          ? kActiveContainerColor
+                          : kInactiveContainerColor,
                       cardchild: IconContent(
                         icon: FontAwesomeIcons.mars,
                         label: 'MALE',
@@ -80,7 +78,7 @@ class _InputPageState extends State<InputPage> {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onDoubleTap: () {
+                    onTap: () {
                       setState(() {
                         selectedGender = selectedGender == Gender.female
                             ? null
@@ -89,8 +87,8 @@ class _InputPageState extends State<InputPage> {
                     },
                     child: ReusableContainer(
                       colorr: selectedGender == Gender.female
-                          ? activeContainerColor
-                          : inactiveContainerColor,
+                          ? kActiveContainerColor
+                          : kInactiveContainerColor,
                       cardchild: IconContent(
                         icon: FontAwesomeIcons.venus,
                         label: 'FEMALE',
@@ -102,14 +100,53 @@ class _InputPageState extends State<InputPage> {
             ),
           ),
           Expanded(
-            child: Container(
-              margin: EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: activeContainerColor,
+            // child: Container(
+            //   margin: EdgeInsets.all(15.0),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10.0),
+            //     color: kActiveContainerColor,
+            //   ),
+            //   height: 200.0,
+            //   width: 400.0,
+            // ),
+            child: ReusableContainer(
+              colorr: kActiveContainerColor,
+              cardchild: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'HEIGHT',
+                    style: kLabelTextStyle,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
+                    children: [
+                      Text(
+                        height.toString(),
+                        style: kNumberTextStyle,
+                      ),
+                      Text(
+                        'cm',
+                        style: kLabelTextStyle,
+                      ),
+                    ],
+                  ),
+                  Slider(
+                      value: height.toDouble(),
+                      min: 120,
+                      max: 220,
+                      activeColor: Color(0xFFEB1555),
+                      inactiveColor: Color(0xFF8D8E98),
+                      label: '$height',
+                      onChanged: (double newValue) {
+                        setState(() {
+                          height = newValue.round();
+                        });
+                      }),
+                ],
               ),
-              height: 200.0,
-              width: 400.0,
             ),
           ),
           Expanded(
@@ -117,7 +154,7 @@ class _InputPageState extends State<InputPage> {
               children: [
                 Expanded(
                   child: ReusableContainer(
-                    colorr: activeContainerColor,
+                    colorr: kActiveContainerColor,
                     cardchild: Column(
                       children: [
                         Icon(
@@ -140,7 +177,7 @@ class _InputPageState extends State<InputPage> {
                 ),
                 Expanded(
                   child: ReusableContainer(
-                    colorr: activeContainerColor,
+                    colorr: kActiveContainerColor,
                     cardchild: Column(
                       children: [
                         Icon(
@@ -163,11 +200,11 @@ class _InputPageState extends State<InputPage> {
           ),
           Container(
             width: double.infinity,
-            height: bottomContainerHeight,
+            height: kBottomContainerHeight,
             margin: EdgeInsets.only(top: 10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
-              color: bottomContainerColor,
+              color: kBottomContainerColor,
             ),
           ),
         ],
