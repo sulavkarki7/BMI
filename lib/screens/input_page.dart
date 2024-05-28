@@ -1,9 +1,13 @@
 import 'dart:math';
-import 'reusable_container.dart';
-import 'icon_content.dart';
-import 'constant.dart';
+import 'package:bmiapp/components/bottom_button.dart';
 
-import 'main.dart';
+import '../components/reusable_container.dart';
+import '../components/icon_content.dart';
+import '../constant.dart';
+import 'results_page.dart';
+import 'package:bmiapp/calculator_brain.dart';
+
+import '../main.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -21,9 +25,9 @@ class InputPage extends StatefulWidget {
 
 class _InputPageState extends State<InputPage> {
   Gender? selectedGender;
-  int height = 180;
+  int height = 165;
   int weight = 60;
-  int age = 16;
+  int age = 20;
   // Color maleContainerColor = inactiveContainerColor;
   // Color femaleContainerColor = inactiveContainerColor;
 
@@ -62,10 +66,13 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedGender =
-                            selectedGender == Gender.male ? null : Gender.male;
-                      });
+                      if (selectedGender != Gender.male) {
+                        setState(() {
+                          selectedGender = selectedGender == Gender.male
+                              ? null
+                              : Gender.male;
+                        });
+                      }
                     },
                     child: ReusableContainer(
                       colorr: selectedGender == Gender.male
@@ -81,11 +88,13 @@ class _InputPageState extends State<InputPage> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selectedGender = selectedGender == Gender.female
-                            ? null
-                            : Gender.female;
-                      });
+                      if (selectedGender != Gender.female) {
+                        setState(() {
+                          selectedGender = selectedGender == Gender.female
+                              ? null
+                              : Gender.female;
+                        });
+                      }
                     },
                     child: ReusableContainer(
                       colorr: selectedGender == Gender.female
@@ -149,7 +158,7 @@ class _InputPageState extends State<InputPage> {
                     child: Slider(
                         value: height.toDouble(),
                         min: 120,
-                        max: 220,
+                        max: 205,
                         label: '$height',
                         onChanged: (double newValue) {
                           setState(() {
@@ -273,15 +282,22 @@ class _InputPageState extends State<InputPage> {
               ],
             ),
           ),
-          Container(
-            width: double.infinity,
-            height: kBottomContainerHeight,
-            margin: EdgeInsets.only(top: 10.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              color: kBottomContainerColor,
-            ),
-          ),
+          BottomButton(
+              onTap: () {
+                CalculatorBrain calc =
+                    CalculatorBrain(height: height, weight: weight);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ResultsPage(
+                      bmiResult: calc.calculateBMI(),
+                      resultText: calc.getResult(),
+                      interpreatation: calc.getInterpretation(),
+                    ),
+                  ),
+                );
+              },
+              buttonTitle: 'CALCULATE')
         ],
       ),
     );
@@ -295,16 +311,14 @@ class RoundIconButton extends StatelessWidget {
     required this.onPressed,
   });
   final IconData icon;
-  final Function onPressed;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
     return RawMaterialButton(
       elevation: 6.0,
       constraints: BoxConstraints.tightFor(width: 56.0, height: 56.0),
-      onPressed: () {
-        onPressed();
-      },
+      onPressed: onPressed,
       shape: CircleBorder(),
       fillColor: Color(0xFF4C4F5E),
       child: Icon(icon),
