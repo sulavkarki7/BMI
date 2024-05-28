@@ -25,8 +25,8 @@ class _SplashState extends State<Splashh> {
         height: 50,
         child: Image.asset("images/wait3.png"),
       ),
-      duration: const Duration(milliseconds: 4000),
-      animationDuration: const Duration(milliseconds: 2500),
+      duration: const Duration(milliseconds: 6000),
+      animationDuration: const Duration(milliseconds: 3500),
       onAnimationEnd: () => debugPrint("On Scale End"),
       nextScreen: InputPage(),
     );
